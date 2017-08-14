@@ -11,12 +11,12 @@ namespace SimpleAnalyzer.Helpers
     {
         public static ISymbol GetSymbol(CSharpSyntaxNode node, SemanticModel semanticModel)
         {
-            ExpressionSyntax expressionSyntax = null;
+            CSharpSyntaxNode syntaxNode;
 
             switch (node.Kind())
             {
                 case SyntaxKind.LockStatement:
-                    expressionSyntax = ((LockStatementSyntax) node).Expression;
+                    syntaxNode = ((LockStatementSyntax) node).Expression;
                     break;
 
                 case SyntaxKind.InvocationExpression:
@@ -24,57 +24,29 @@ namespace SimpleAnalyzer.Helpers
                     if (invocationExpressionSyntax.Expression is MemberAccessExpressionSyntax member
                         && member.Expression is IdentifierNameSyntax className
                         && className.Identifier.Text == nameof(Monitor))
-                        expressionSyntax = invocationExpressionSyntax.ArgumentList.Arguments[0].Expression;
+                        syntaxNode = invocationExpressionSyntax.ArgumentList.Arguments[0].Expression;
                     else
-                        expressionSyntax = invocationExpressionSyntax.Expression;
+                        syntaxNode = invocationExpressionSyntax.Expression;
                     break;
 
                 case SyntaxKind.ElementAccessExpression:
                     var elementAccessExpression = (ElementAccessExpressionSyntax) node;
-                    expressionSyntax = elementAccessExpression.Expression;
-                    break;
-
-                case SyntaxKind.SimpleMemberAccessExpression:
-                    var memberAccessExpressionSyntax = (MemberAccessExpressionSyntax) node;
-                    expressionSyntax = memberAccessExpressionSyntax;
-                    break;
-
-                case SyntaxKind.IdentifierName:
-                    var identifierNameSyntax = (IdentifierNameSyntax) node;
-                    expressionSyntax = identifierNameSyntax;
-                    break;
-
-                case SyntaxKind.PredefinedType:
-                    expressionSyntax = (PredefinedTypeSyntax)node;
-                    break;
-
-                case SyntaxKind.ParenthesizedExpression:
-                    expressionSyntax = (ParenthesizedExpressionSyntax) node;
-                    break;
-
-                case SyntaxKind.ThisExpression:
-                    expressionSyntax = (ThisExpressionSyntax) node;
-                    break;
-                case SyntaxKind.GenericName:
-                    expressionSyntax = (GenericNameSyntax) node;
-                    break;
-
-                case SyntaxKind.PointerMemberAccessExpression:
-                    expressionSyntax = (MemberAccessExpressionSyntax) node;
+                    syntaxNode = elementAccessExpression.Expression;
                     break;
 
                 default:
-                    throw new InvalidOperationException();
+                    syntaxNode = node;
+                    break;
             }
 
 
-            var elementAccessExpressionSyntax = expressionSyntax as ElementAccessExpressionSyntax;
+            var elementAccessExpressionSyntax = syntaxNode as ElementAccessExpressionSyntax;
 
-            expressionSyntax = elementAccessExpressionSyntax != null
+            syntaxNode = elementAccessExpressionSyntax != null
                 ? elementAccessExpressionSyntax.Expression
-                : expressionSyntax;
+                : syntaxNode;
 
-            var symbol = semanticModel.GetSymbolInfo(expressionSyntax).Symbol;
+            var symbol = semanticModel.GetSymbolInfo(syntaxNode).Symbol;
 
             symbol = FixSymbolIfLocalVariable(node, elementAccessExpressionSyntax, symbol, semanticModel);
 

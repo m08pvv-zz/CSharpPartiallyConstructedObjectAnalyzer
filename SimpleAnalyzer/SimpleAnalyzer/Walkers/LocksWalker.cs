@@ -10,7 +10,7 @@ namespace SimpleAnalyzer.Walkers
 {
     public class LocksWalker : CSharpSyntaxWalker
     {
-        protected bool InMethod = false;
+        protected bool InMethod;
         protected SemanticModel SemanticModel;
         protected readonly Stack<ISymbol> CurrentLock = new Stack<ISymbol>();
 
