@@ -10,6 +10,7 @@ namespace SimpleAnalyzer.Walkers
 {
     public class LocksWalker : CSharpSyntaxWalker
     {
+        protected bool InMethod = false;
         protected SemanticModel SemanticModel;
         protected readonly Stack<ISymbol> CurrentLock = new Stack<ISymbol>();
 
@@ -20,6 +21,7 @@ namespace SimpleAnalyzer.Walkers
 
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
+            InMethod = true;
             CurrentLock.Clear();
             try
             {
@@ -29,6 +31,7 @@ namespace SimpleAnalyzer.Walkers
             {
                 // We can just swallow it here
             }
+            InMethod = false;
             CurrentLock.Clear();
         }
 

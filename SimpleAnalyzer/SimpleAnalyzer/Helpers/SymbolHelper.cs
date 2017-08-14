@@ -36,7 +36,7 @@ namespace SimpleAnalyzer.Helpers
 
                 case SyntaxKind.SimpleMemberAccessExpression:
                     var memberAccessExpressionSyntax = (MemberAccessExpressionSyntax) node;
-                    expressionSyntax = memberAccessExpressionSyntax.Expression;
+                    expressionSyntax = memberAccessExpressionSyntax;
                     break;
 
                 case SyntaxKind.IdentifierName:

@@ -24,7 +24,7 @@ namespace SimpleAnalyzer.Walkers
             if (identifierText != nameof(Type)
                 || identifierText != nameof(TypeCode))
             {
-                var symbol = SymbolHelper.GetSymbol(node, SemanticModel);
+                var symbol = SymbolHelper.GetSymbol(node.Expression, SemanticModel);
 
                 if (symbol != null && _newObjectsAndLocks.Keys.Contains(symbol))
                 {

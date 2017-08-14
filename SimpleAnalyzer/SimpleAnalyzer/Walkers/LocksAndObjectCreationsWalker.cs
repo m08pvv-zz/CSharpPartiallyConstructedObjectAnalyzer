@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -9,24 +8,15 @@ namespace SimpleAnalyzer.Walkers
 {
     public class LocksAndObjectCreationsWalker : LocksWalker
     {
-        private bool _inMethod = false;
-
         public LocksAndObjectCreationsWalker(SemanticModel semanticModel) : base (semanticModel)
         {
         }
 
         public Dictionary<ISymbol, List<ISymbol>> NewObjectsAndLocks { get;  } = new Dictionary<ISymbol, List<ISymbol>>();
 
-        public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
-        {
-            _inMethod = true;
-            base.VisitMethodDeclaration(node);
-            _inMethod = false;
-        }
-
         public override void VisitObjectCreationExpression(ObjectCreationExpressionSyntax node)
         {
-            if (_inMethod && CurrentLock.Count > 0)
+            if (InMethod && CurrentLock.Count > 0)
             {
                 ISymbol symbol = null;
                 if (node.Parent is AssignmentExpressionSyntax assignmentExpressionSyntax)
