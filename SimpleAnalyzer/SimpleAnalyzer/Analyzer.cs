@@ -15,6 +15,9 @@ namespace SimpleAnalyzer
         {
             [Option('d', "directory", Required = true, HelpText = "Directory for search with pattern *.")]
             public string Directory { get; set; }
+
+            [Option('r', "recursive", Default = false, HelpText = "Option to search recursively in directory")]
+            public bool Recursive { get; set; }
         }
 
         private static void Main(string[] args)
@@ -23,9 +26,12 @@ namespace SimpleAnalyzer
             if (parsedOptions == null)
                 return;
 
-            foreach (var fileName in Directory.EnumerateFiles(parsedOptions.Directory, "*.cs"))
+            var analyzedFilesCount = 0;
+
+            foreach (var fileName in Directory.EnumerateFiles(parsedOptions.Directory, "*.cs", parsedOptions.Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
             {
                 var result = AnalyzeCode(File.ReadAllText(fileName)).ToList();
+                ++analyzedFilesCount;
 
                 if (result.Any())
                 {
@@ -36,6 +42,8 @@ namespace SimpleAnalyzer
                     Console.WriteLine();
                 }
             }
+
+            Console.WriteLine($"Analyzed {analyzedFilesCount} file(s)");
         }
 
         public static IEnumerable<ISymbol> AnalyzeCode(string code)
