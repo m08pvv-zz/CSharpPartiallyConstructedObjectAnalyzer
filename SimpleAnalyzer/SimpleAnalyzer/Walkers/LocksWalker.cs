@@ -21,7 +21,14 @@ namespace SimpleAnalyzer.Walkers
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
             CurrentLock.Clear();
-            base.VisitMethodDeclaration(node);
+            try
+            {
+                base.VisitMethodDeclaration(node);
+            }
+            catch (InvalidOperationException e)
+            {
+                // We can just swallow it here
+            }
             CurrentLock.Clear();
         }
 

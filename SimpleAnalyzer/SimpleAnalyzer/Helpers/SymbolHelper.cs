@@ -58,6 +58,11 @@ namespace SimpleAnalyzer.Helpers
                 case SyntaxKind.GenericName:
                     expressionSyntax = (GenericNameSyntax) node;
                     break;
+
+                case SyntaxKind.PointerMemberAccessExpression:
+                    expressionSyntax = (MemberAccessExpressionSyntax) node;
+                    break;
+
                 default:
                     throw new InvalidOperationException();
             }
@@ -85,7 +90,7 @@ namespace SimpleAnalyzer.Helpers
         private static ISymbol FixSymbolIfLocalVariable(CSharpSyntaxNode node,
             ElementAccessExpressionSyntax elementAccessExpressionSyntax, ISymbol symbol, SemanticModel semanticModel)
         {
-            if (elementAccessExpressionSyntax == null || symbol.Kind != SymbolKind.Local)
+            if (elementAccessExpressionSyntax == null || symbol == null || symbol.Kind != SymbolKind.Local)
                 return symbol;
 
             var variableDeclaratorSyntaxs = node

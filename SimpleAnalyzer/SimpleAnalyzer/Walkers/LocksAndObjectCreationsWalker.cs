@@ -44,25 +44,24 @@ namespace SimpleAnalyzer.Walkers
                 {
                     symbol = SemanticModel.GetDeclaredSymbol(variableDeclaratorSyntax);
                 }
-                else
+
+                if (symbol != null)
                 {
-                    throw new NotSupportedException();
-                }
+                    var blockSyntax = node.Parent.Ancestors().OfType<BlockSyntax>().First();
 
-                var blockSyntax = node.Parent.Ancestors().OfType<BlockSyntax>().First();
+                    var analyzeBlockWalker = new AnalyzeBlockWalker(SemanticModel, symbol);
+                    analyzeBlockWalker.Visit(blockSyntax);
 
-                var analyzeBlockWalker = new AnalyzeBlockWalker(SemanticModel, symbol);
-                analyzeBlockWalker.Visit(blockSyntax);
+                    var nonVolatileFieldsAndProperties = analyzeBlockWalker.NonVolatileFieldsAndProperties.ToList();
 
-                var nonVolatileFieldsAndProperties = analyzeBlockWalker.NonVolatileFieldsAndProperties.ToList();
-
-                if (nonVolatileFieldsAndProperties.Any())
-                {
-                    var locks = CurrentLock.ToList();
-                    foreach (var nonVolatileFieldsAndProperty in nonVolatileFieldsAndProperties)
+                    if (nonVolatileFieldsAndProperties.Any())
                     {
-                        if (!NewObjectsAndLocks.ContainsKey(nonVolatileFieldsAndProperty))
-                            NewObjectsAndLocks.Add(nonVolatileFieldsAndProperty, locks);
+                        var locks = CurrentLock.ToList();
+                        foreach (var nonVolatileFieldsAndProperty in nonVolatileFieldsAndProperties)
+                        {
+                            if (!NewObjectsAndLocks.ContainsKey(nonVolatileFieldsAndProperty))
+                                NewObjectsAndLocks.Add(nonVolatileFieldsAndProperty, locks);
+                        }
                     }
                 }
             }
