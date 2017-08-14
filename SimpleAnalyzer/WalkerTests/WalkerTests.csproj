@@ -141,9 +141,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalyzerTests.cs" />
     <Compile Include="LocksAndObjectCreationWalkerDebug.cs" />
     <Compile Include="LocksWalkerDebug.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SyntaxWalkerDebugBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimpleAnalyzer\SimpleAnalyzer.csproj">

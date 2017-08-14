@@ -25,7 +25,7 @@ namespace SimpleAnalyzer
 
             foreach (var fileName in Directory.EnumerateFiles(parsedOptions.Directory, "*.cs"))
             {
-                var result = AnalyzeFile(File.ReadAllText(fileName)).ToList();
+                var result = AnalyzeCode(File.ReadAllText(fileName)).ToList();
 
                 if (result.Any())
                 {
@@ -38,7 +38,7 @@ namespace SimpleAnalyzer
             }
         }
 
-        private static IEnumerable<ISymbol> AnalyzeFile(string code)
+        public static IEnumerable<ISymbol> AnalyzeCode(string code)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(code);
             var compilation = CSharpCompilation.Create("CoreFX", new[] {syntaxTree});
