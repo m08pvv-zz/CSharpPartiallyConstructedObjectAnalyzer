@@ -31,6 +31,7 @@ namespace SimpleAnalyzer.Helpers
 
                 case SyntaxKind.ElementAccessExpression:
                     var elementAccessExpression = (ElementAccessExpressionSyntax) node;
+                    // TODO: we need somehow tell to other code that it's ElementAccessExpression
                     syntaxNode = elementAccessExpression.Expression;
                     break;
 

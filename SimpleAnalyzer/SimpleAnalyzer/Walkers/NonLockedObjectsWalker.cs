@@ -9,7 +9,7 @@ namespace SimpleAnalyzer.Walkers
 {
     public class NonLockedObjectsWalker : LocksWalker
     {
-        private Dictionary<ISymbol, List<ISymbol>> _newObjectsAndLocks;
+        private readonly Dictionary<ISymbol, List<ISymbol>> _newObjectsAndLocks;
         public HashSet<ISymbol> PotentialIssuesFound { get; } = new HashSet<ISymbol>();
 
 
@@ -33,7 +33,16 @@ namespace SimpleAnalyzer.Walkers
                     if (!objectLocks.All(x => CurrentLock.Contains(x)))
                     {
                         if (!PotentialIssuesFound.Contains(symbol))
+                        {
+                            if (GloablOptions.Verbose)
+                            {
+                                Console.WriteLine($"For node {node}");
+                                Console.WriteLine($"With parent {node.Parent}");
+                                Console.WriteLine($"In lock(s) {String.Join(", ", objectLocks)}");
+                                Console.WriteLine();
+                            }
                             PotentialIssuesFound.Add(symbol);
+                        }
                     }
                 }
             }

@@ -9,15 +9,23 @@ using SimpleAnalyzer.Walkers;
 
 namespace SimpleAnalyzer
 {
+    public static class GloablOptions
+    {
+        public static bool Verbose { get; set; }
+    }
+
     public class Analyzer
     {
         class Options
         {
-            [Option('d', "directory", Required = true, HelpText = "Directory for search with pattern *.")]
+            [Option('d', "directory", Required = true, HelpText = "Directory for search with pattern *.cs")]
             public string Directory { get; set; }
 
             [Option('r', "recursive", Default = false, HelpText = "Option to search recursively in directory")]
             public bool Recursive { get; set; }
+
+            [Option('v', "verbose", Default = false, HelpText = "Display debug output")]
+            public bool Verbose { get; set; }
         }
 
         private static void Main(string[] args)
@@ -25,6 +33,8 @@ namespace SimpleAnalyzer
             var parsedOptions = (Parser.Default.ParseArguments<Options>(args) as Parsed<Options>)?.Value;
             if (parsedOptions == null)
                 return;
+
+            GloablOptions.Verbose = parsedOptions.Verbose;
 
             var analyzedFilesCount = 0;
 

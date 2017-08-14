@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -50,7 +51,16 @@ namespace SimpleAnalyzer.Walkers
                         foreach (var nonVolatileFieldsAndProperty in nonVolatileFieldsAndProperties)
                         {
                             if (!NewObjectsAndLocks.ContainsKey(nonVolatileFieldsAndProperty))
+                            {
+                                if (GloablOptions.Verbose)
+                                {
+                                    Console.WriteLine($"For node {node}");
+                                    Console.WriteLine($"With parent {node.Parent}");
+                                    Console.WriteLine($"In lock(s) {String.Join(", ", locks)}");
+                                    Console.WriteLine();
+                                }
                                 NewObjectsAndLocks.Add(nonVolatileFieldsAndProperty, locks);
+                            }
                         }
                     }
                 }
