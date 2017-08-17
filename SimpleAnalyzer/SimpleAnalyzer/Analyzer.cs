@@ -59,7 +59,9 @@ namespace SimpleAnalyzer
         public static IEnumerable<ISymbol> AnalyzeCode(string code)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(code);
-            var compilation = CSharpCompilation.Create("CoreFX", new[] {syntaxTree});
+            var compilation = CSharpCompilation.Create("CoreFX", new[] {syntaxTree})
+                    .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
+                    .AddReferences(MetadataReference.CreateFromFile(typeof(List<>).Assembly.Location));
 
             var semanticModel = compilation.GetSemanticModel(syntaxTree);
 
