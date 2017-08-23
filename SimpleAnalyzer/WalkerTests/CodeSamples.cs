@@ -1,4 +1,4 @@
-namespace SimpleAnalyzer
+namespace WalkerTests
 {
     public static class CodeSamples
     {

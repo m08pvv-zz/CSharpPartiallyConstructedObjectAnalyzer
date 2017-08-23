@@ -142,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyzerTests.cs" />
+    <Compile Include="CodeSamples.cs" />
     <Compile Include="LocksAndObjectCreationWalkerDebug.cs" />
     <Compile Include="LocksWalkerDebug.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

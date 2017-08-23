@@ -141,7 +141,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analyzer.cs" />
-    <Compile Include="CodeSamples.cs" />
     <Compile Include="Helpers\SymbolHelper.cs" />
     <Compile Include="Walkers\LocksAndObjectCreationsWalker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
